@@ -13,12 +13,10 @@ be used instead:
 - Manually add the path to the directory containing the DLLs to the system PATH environment variable.
 
 """
-
 import os
 import sys
 
 def configure_path():
-    print("this works!")
     is_64bits = sys.maxsize > 2**32
     relative_path_to_dlls = '..' + os.sep + 'dlls' + os.sep
 
@@ -28,10 +26,17 @@ def configure_path():
         relative_path_to_dlls += '32_lib'
 
     absolute_path_to_file_directory = os.path.dirname(os.path.abspath(__file__))
+    
+    
+    #absolute_path_to_dlls = os.path.abspath(os.path.join(absolute_path_to_file_directory, 'thorlabs folder', relative_path_to_dlls))
+    #absolute_path_to_dlls = r"C:\Program Files\Thorlabs\Scientific Imaging\ThorCam"
 
-    absolute_path_to_dlls = os.path.abspath(os.path.join(absolute_path_to_file_directory, 'thorlabs folder', relative_path_to_dlls))
-
+    #must change path to absolute_path_to_dlls. Current is 64 bit library
+    absolute_path_to_dlls = r"C:\Users\desha\Codes\Scientific_Camera_Interfaces_Windows-2.1\Scientific Camera Interfaces\SDK\Python Toolkit\dlls\64_lib"
+    print("absolute_path_to_dlls: ", absolute_path_to_dlls)
     os.environ['PATH'] = absolute_path_to_dlls + os.pathsep + os.environ['PATH']
+
+    #os.environ['PATH'] = absolute_path_to_dlls + os.pathsep + os.environ['PATH']
 
     try:
         # Python 3.8 introduces a new method to specify dll directory
