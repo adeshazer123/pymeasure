@@ -69,12 +69,13 @@ class CS165MUM():
         image_data.save(file_path, format = 'TIFF')
         print(f"Image saved to {file_path}")
     
+        
+    
     def dispose(self):
         self.camera.disarm()
-        print("Camera disarmed")
-        logging.debug("Disposing the camera...")
+        log.info("Camera disarmed")
         self.camera.dispose() #After called, the camera object is no longer valid and should not be used.
-        logging.debug("Camera disposed.")
+        logging.info("Camera disposed.")
         
     
 
@@ -85,7 +86,6 @@ class ImageAcquisitionThread():
         self._camera = camera
         self._previous_timestamp = 0
         self.image_data = None #added this line
-        #self.image_txt = None #added this line
 
         # setup color processing if necessary
         if self._camera.camera_sensor_type != SENSOR_TYPE.BAYER:
@@ -126,7 +126,7 @@ class ImageAcquisitionThread():
                                                                          self._image_height)
         color_image_data = color_image_data.reshape(self._image_height, self._image_width, 3)
         print("color_image_data =", color_image_data)
-        #self.image_txt = color_image_data #save image data as an array
+
         # return PIL Image object
         return Image.fromarray(color_image_data, mode='RGB')
 
@@ -146,7 +146,7 @@ class ImageAcquisitionThread():
             else:
                 pil_image = self._get_image(frame)
                 print("not color image")
-            #self._image_queue.put_nowait(pil_image)
+
         self._mono_to_color_processor.dispose()
         self._mono_to_color_sdk.dispose()
         print("Disposed")  
