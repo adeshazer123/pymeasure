@@ -7,3 +7,7 @@ import logging
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
+
+class KPC101():
+    def __init__(self):
+        print("KPC101 initialized")
