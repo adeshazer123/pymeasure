@@ -56,6 +56,10 @@ class KPZ101():
         max_voltage = self.device.GetMaxOutputVoltage()
         return max_voltage
     
+    def get_voltage(self): 
+        voltage = self.device.GetOutputVoltage()
+        return voltage
+    
     def set_voltage(self,voltage):
         voltage = Decimal(voltage)
     
