@@ -26,7 +26,7 @@ adapter = DSA815("USB0::0x1AB1::0x0960::DSA8A154202508::INSTR")
 
 
 class DSA815Spectrum(Procedure):
-    def __init__(self, adapter, name="RIGOL DSA815 Spectrum Analyzer", **kwargs):
+    def __init__(self, adapter, name="RIGOL DSA815 Spectrum Analyzer",  **kwargs):
         super().__init__(
             adapter,
             name,
