@@ -104,8 +104,8 @@ class DSA815(Instrument):
         and peak data for a particular trace, based on the
         trace number (1, 2, or 3).
         """
-       trace1 = self.trace()
+       trace_data = self.trace()
        return pd.DataFrame({
-            'Frequency (GHz)': self.frequencies(len(trace1)) * 1e-9,
-            'Amplitude (dBm)': trace1
+            'Frequency (GHz)': self.frequencies(len(trace_data)) * 1e-9,
+            'Amplitude (dBm)': trace_data
             })
