@@ -1,6 +1,6 @@
 # Author: Amelie Deshazer 
 # Date: 2024-07-03
-# Purpose: This script will control the piezoelectric stage to move the reference arm. 
+# Purpose: The script will move the z direction of the stage
 
 import logging 
 
@@ -65,9 +65,6 @@ class KDC101():
     def get_position(self): 
         self.device.GetPosition()
         log.info(f"Device is at {self.device.Position} mm")
-
-    def set_velocity(self, velocity):
-        self.device.
     
     def disconnect(self): 
         self.device.StopPolling()
