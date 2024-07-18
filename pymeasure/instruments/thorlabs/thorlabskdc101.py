@@ -20,6 +20,7 @@ from System import Decimal
 import time
 
 print("reading the class...")
+
 class KDC101():
     def __init__(self):
         DeviceManagerCLI.BuildDeviceList()
@@ -52,9 +53,11 @@ class KDC101():
 
         
     def move_home(self):
-        self.device.SetZero() 
+
+        home = self.device.SetZero() 
         log.info("Device moved to home position")
         print("Device moved to home position") #for debugging purposes
+        return home
     
     def move_relative(self, distance): 
         self.device.MoveTo(Decimal(distance))
@@ -71,9 +74,3 @@ class KDC101():
         self.device.Disconnet()
         log.info("Device has been disconnected")
         print("Device has been disconnected") #for debugging purposes
-
-
-
-
-
-
