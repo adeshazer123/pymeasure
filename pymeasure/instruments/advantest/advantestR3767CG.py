@@ -1,7 +1,7 @@
 #
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2023 PyMeasure Developers
+# Copyright (c) 2013-2024 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,11 @@
 # THE SOFTWARE.
 #
 
-from pymeasure.instruments import Instrument
+from pymeasure.instruments import Instrument, SCPIUnknownMixin
 from pymeasure.instruments.validators import strict_range
 
 
-class AdvantestR3767CG(Instrument):
+class AdvantestR3767CG(SCPIUnknownMixin, Instrument):
     """ Represents the Advantest R3767CG VNA. Implements controls to change the analysis
         range and to retrieve the data for the trace.
     """

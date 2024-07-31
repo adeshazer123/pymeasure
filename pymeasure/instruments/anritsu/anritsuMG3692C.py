@@ -1,7 +1,7 @@
 #
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2023 PyMeasure Developers
+# Copyright (c) 2013-2024 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,10 @@
 # THE SOFTWARE.
 #
 
-from pymeasure.instruments import Instrument
+from pymeasure.instruments import Instrument, SCPIUnknownMixin
 
 
-class AnritsuMG3692C(Instrument):
+class AnritsuMG3692C(SCPIUnknownMixin, Instrument):
     """ Represents the Anritsu MG3692C Signal Generator
     """
     power = Instrument.control(

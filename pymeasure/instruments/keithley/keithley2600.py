@@ -1,6 +1,6 @@
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2023 PyMeasure Developers
+# Copyright (c) 2013-2024 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ import time
 from warnings import warn
 
 import numpy as np
-from pymeasure.instruments import Instrument
+from pymeasure.instruments import Instrument, SCPIUnknownMixin
 from pymeasure.instruments.validators import truncated_range, strict_discrete_set
 
 # Setup logging
@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 
-class Keithley2600(Instrument):
+class Keithley2600(SCPIUnknownMixin, Instrument):
     """Represents the Keithley 2600 series (channel A and B) SourceMeter"""
 
     def __init__(self, adapter, name="Keithley 2600 SourceMeter", **kwargs):

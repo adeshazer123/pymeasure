@@ -1,7 +1,7 @@
 #
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2023 PyMeasure Developers
+# Copyright (c) 2013-2024 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 #
 from math import sqrt, log10
-from pymeasure.instruments import Instrument, Channel
+from pymeasure.instruments import Instrument, Channel, SCPIUnknownMixin
 from pymeasure.instruments.validators import strict_range, strict_discrete_set
 
 
@@ -146,7 +146,7 @@ class AFG3152CChannel(Channel):
         self.write("voltage:offset %eV" % offset)
 
 
-class AFG3152C(Instrument):
+class AFG3152C(SCPIUnknownMixin, Instrument):
     """Represents the Tektronix AFG 3000 series (one or two channels)
     arbitrary function generator and provides a high-level for
     interacting with the instrument.

@@ -1,7 +1,7 @@
 #
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2023 PyMeasure Developers
+# Copyright (c) 2013-2024 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 import logging
 import numpy as np
-from pymeasure.instruments import Instrument
+from pymeasure.instruments import Instrument, SCPIUnknownMixin
 from pymeasure.instruments.validators import strict_discrete_set, strict_range
 
 log = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ WL_RANGE = [1480, 1620]
 LOCK_PW = 1234
 
 
-class KeysightN7776C(Instrument):
+class KeysightN7776C(SCPIUnknownMixin, Instrument):
     """
     This represents the Keysight N7776C Tunable Laser Source interface.
 

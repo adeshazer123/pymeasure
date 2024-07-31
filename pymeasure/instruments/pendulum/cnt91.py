@@ -1,7 +1,7 @@
 #
 # This file is part of the PyMeasure package.
 #
-# Copyright (c) 2013-2023 PyMeasure Developers
+# Copyright (c) 2013-2024 PyMeasure Developers
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ import logging
 from time import sleep
 from warnings import warn
 
-from pymeasure.instruments import Instrument
+from pymeasure.instruments import Instrument, SCPIUnknownMixin
 from pymeasure.instruments.validators import (
     strict_discrete_set,
     strict_range,
@@ -43,7 +43,7 @@ MIN_BUFFER_SIZE = 4  # Programmer's guide 8-39
 MAX_BUFFER_SIZE = 10000  # Programmer's guide 8-39
 
 
-class CNT91(Instrument):
+class CNT91(SCPIUnknownMixin, Instrument):
     """Represents a Pendulum CNT-91 frequency counter."""
 
     CHANNELS = {"A": 1, "B": 2, "C": 3, "E": 4, "INTREF": 6}
