@@ -78,17 +78,17 @@ class Axis(Channel):
                                       """Reads the current poision""",
                                       get_process=lambda v: v[2]
                                       )
-    speed = Instrument.control("?:D,{ch},D",
-                               "D:D,{ch},%d,%d,%d",
-                               """An integer property that represents the speed of the axis in pulses/s units""",
-                               validator=truncated_range,
-                               values=((1, 1, 1), (800000, 800000, 1000)),
-                               get_process=lambda v: list(map(int, v)),
-                               check_set_errors=True,
-                               )
-    error = Instrument.measurement("SRQ:D,{ch}",
-                                   """Get an error code from the stage.""",
-                                   )
+    # speed = Instrument.control("?:D,{ch},D",
+    #                            "D:D,{ch},%d,%d,%d",
+    #                            """An integer property that represents the speed of the axis in pulses/s units""",
+    #                            validator=truncated_range,
+    #                            values=((1, 1, 1), (800000, 800000, 1000)),
+    #                            get_process=lambda v: list(map(int, v)),
+    #                            check_set_errors=True,
+    #                            )
+    # error = Instrument.measurement("SRQ:D,{ch}",
+    #                                """Get an error code from the stage.""",
+    #                                )
 
     def home(self):
         """
@@ -108,7 +108,7 @@ class Axis(Channel):
 
         if speed > 0 and range > 0 and acce >0: 
             self.write("D:D,{ch}," + f"+{speed},{range},{acce}")
-            self.wait_for_ready()
+            # self.wait_for_ready()
             return self.read()
         else:
             print("NG")
@@ -116,16 +116,17 @@ class Axis(Channel):
     def status(self):
         is_busy = self.ask("SRQ:D,{ch}")
         message = is_busy.split(",")
-        return message[5]
+        return message[len(message)-1]
     
     def wait_for_ready(self):
-        time0 = time.time()
-        while self.status() == 'B':
-            time1 = time0-time.time() 
-            if time1 >= 10: 
+        time0 = time()
+        while self.status() != 'R':
+            print(self.status())
+            time1 = time()-time0 
+            if time1 >= 60: 
                 log.warning("Timeout")
                 break
-            sleep(0.1)
+            sleep(0.2)
  
 
     def move(self, pos):
@@ -201,23 +202,23 @@ class Axis(Channel):
         self.write("LE:A")
         return self.read()
     
-    @property
-    def errors(self):
-        """
+    # @property
+    # def errors(self):
+    #     """
 
-        Get a whole error Exceptions that can be later raised, or used to diagnose the situation.
+    #     Get a whole error Exceptions that can be later raised, or used to diagnose the situation.
 
-        Parameters:
-            - self: The current instance of the class (implicitly passed).
+    #     Parameters:
+    #         - self: The current instance of the class (implicitly passed).
 
-        Returns:
-            - AxisError object: An instance of the `AxisError` class based on the error code retrieved from the device.
+    #     Returns:
+    #         - AxisError object: An instance of the `AxisError` class based on the error code retrieved from the device.
 
-        """
+    #     """
 
-        code = self.error
-        errors = AxisError(*code[2:])
-        return errors
+    #     code = self.error
+    #     errors = AxisError(*code[2:])
+    #     return errors
 
 
 class SBIS26(Instrument):
@@ -257,11 +258,17 @@ class SBIS26(Instrument):
             **kwargs
         )
 
-        #self.initialize()
+        self.write("D:B,1,200000,200000,100,2,200000,200000,100,3,200000,200000,100")
+        
 
     ch_1 = Instrument.ChannelCreator(Axis, 1)
     ch_2 = Instrument.ChannelCreator(Axis, 2)
     ch_3 = Instrument.ChannelCreator(Axis, 3)
+
+    def count_devices(self):
+        """count the number of devices in int"""
+        number = self.ask("CONNECT?")
+        return int(number)
 
     def initialize(self):
         """Initializes the SBIS26 object"""
