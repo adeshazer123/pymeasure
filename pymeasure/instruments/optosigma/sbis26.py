@@ -23,10 +23,11 @@
 #
 
 import logging
-from time import sleep
+import numpy as np
+from time import sleep, time
 from pymeasure.instruments import Instrument, Channel
 from pymeasure.instruments.validators import truncated_range, strict_discrete_set
-
+from pyvisa import constants as vconst
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
@@ -93,8 +94,39 @@ class Axis(Channel):
         """
         Send the stage to the mechanical home
         """
-        self.write("H:{ch}")
+        self.write("H:D,{ch}")
+        print("Moved home")
+        self.wait_for_ready()
         return self.read()
+    
+    def set_speed(self, speed, range,acce):
+        """Sets the speed of the device
+            Speed (int): Set speed based on channel
+            Range (int): Speed range
+            acce (int): Acceleration time
+        """
+
+        if speed > 0 and range > 0 and acce >0: 
+            self.write("D:D,{ch}," + f"+{speed},{range},{acce}")
+            self.wait_for_ready()
+            return self.read()
+        else:
+            print("NG")
+
+    def status(self):
+        is_busy = self.ask("SRQ:D,{ch}")
+        message = is_busy.split(",")
+        return message[5]
+    
+    def wait_for_ready(self):
+        time0 = time.time()
+        while self.status() == 'B':
+            time1 = time0-time.time() 
+            if time1 >= 10: 
+                log.warning("Timeout")
+                break
+            sleep(0.1)
+ 
 
     def move(self, pos):
         """
@@ -107,11 +139,25 @@ class Axis(Channel):
             str: The response received from the write operation.
 
         """
-        if pos >= 0:
-            self.write("A:D,{ch}," + f"+{pos}")
-        else:
-            self.write("A:D,{ch}," + f"{pos}")
+        pos_min = -134217728
+        pos_max = 134217727
 
+        if pos >= pos_min and pos <= pos_max: 
+
+            if pos >= 0:
+                self.write("A:D,{ch}," + f"+{pos}")
+            else:
+                self.write("A:D,{ch}," + f"{pos}")
+        else:
+            if pos >= 0:
+                pos = pos_max
+                self.write("A:D,{ch}," + f"+{pos}")
+            else:
+                pos = pos_min
+                self.write("A:D,{ch}," + f"{pos}")
+
+
+        self.wait_for_ready
         return self.read()
 
     def move_relative(self, pos):
@@ -125,11 +171,27 @@ class Axis(Channel):
         Returns:
             str: The result of the movement.
         """
-        if pos >= 0:
-            self.write("M:D,{ch}," + f"+{pos}")
-        else:
-            self.write("M:D,{ch}," + f"{pos}")
+        pos_min = -134217728
+        pos_max = 134217727
+        # current_pos = 
+        current_position = self.ask("Q:D,{ch}")
+        get_position = current_position.split(",")
+        position = int(get_position[2])
+        target_pos = position - pos
 
+        if target_pos >= pos_min and target_pos <= pos_max:
+            if pos >= 0:
+                self.write("M:D,{ch}," + f"+{pos}")
+            else:
+                self.write("M:D,{ch}," + f"{pos}")
+        else:
+            if pos >= 0:
+                pos = pos_max
+                self.write("A:D,{ch}," + f"+{pos}")
+            else:
+                pos = pos_min
+                self.write("A:D,{ch}," + f"{pos}")
+        self.wait_for_ready()
         return self.read()
 
     def stop(self):
@@ -138,7 +200,7 @@ class Axis(Channel):
         """
         self.write("LE:A")
         return self.read()
-
+    
     @property
     def errors(self):
         """
@@ -177,22 +239,25 @@ class SBIS26(Instrument):
 
     def __init__(self,
                  adapter,
-                 name="OptoSigma SBIS26 Motorized Stage",
+                 name="OptoSigma SBIS26 Motorized Stage", #add gpib pymeasure dict code to set up termination variable
                  baud_rate=38400,
                  **kwargs
                  ):
-        self.termination_str = "\r\n"
+        kwargs.setdefault('read_termination', '\r\n')
 
         super().__init__(
             adapter,
-            name,
-            baud_rate=baud_rate,
-            write_termination=self.termination_str,
-            read_termination=self.termination_str,
+            includeSCPI=True,
+            name = name,
+            asrl = {'baud_rate': baud_rate,
+                    'data_bits': 8,
+                    'parity': vconst.Parity.none,
+                    'stop_bits': vconst.StopBits.one,
+                    },
             **kwargs
         )
 
-        self.initialize()
+        #self.initialize()
 
     ch_1 = Instrument.ChannelCreator(Axis, 1)
     ch_2 = Instrument.ChannelCreator(Axis, 2)
@@ -200,7 +265,7 @@ class SBIS26(Instrument):
 
     def initialize(self):
         """Initializes the SBIS26 object"""
-        self.write("#CONNECT")
+        self.write("#CONNECT:")
         return self.read()
 
     def check_set_errors(self):
@@ -221,5 +286,6 @@ class SBIS26(Instrument):
     def read(self):
         msg = super().read()
         if msg[-1] == "NG":
-            raise ValueError('SBIS26 Error')
+            print("Not OK")
+            #raise ValueError('SBIS26 Error')
         return msg
