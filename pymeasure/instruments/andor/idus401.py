@@ -18,7 +18,7 @@ class IDUS401():
     def set_exposure_time(self, exposure_time):
         exposure_time = 0.01 #placeholder
         self.camera.SetExposureTime(exposure_time)
-        log.info(f"Exposure time set to {exposure_time}") 
+        log.ifo(f"Exposure time set to {exposure_time}") 
         print(f"Exposure time set to {exposure_time}") #for debugging purposes
     
     def set_camera(self,acquisition_mode, read_mode, trigger_mode): 
