@@ -1,4 +1,4 @@
-#Purpose:Driver code to command Andor Idus camera to take images 
+#Purpose: Driver code to command Andor Idus camera to take images 
 
 import logging
 log = logging.getLogger(__name__)
