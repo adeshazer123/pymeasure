@@ -48,7 +48,7 @@ class IDUS401():
         """Sets cooler mode based on shutdown status.
         0 -> Returns to ambient temperature at shutdown 
         1 -> Maintains temperature at shutdown"""
-        error_code = self.camera.SetCoolerMode()
+        error_code = self.camera.SetCoolerMode(cooler_mode)
         self.check_for_errors(error_code)
     
     def cooler_off(self): 
@@ -103,14 +103,14 @@ class IDUS401():
         self.check_for_errors(data)
         return data
     
-    def check_for_errors(self, error_code): 
-        """Checks for errors on commands"""
-        if error_code != Error_Codes.DRV_SUCCESS:
-            log.error(f"Error code {error_code}")
-            raise Exception(f"Error code: {error_code}")
-    
     def shutdown(self): 
         """Shuts down the camera"""
         error_code = self.camera.ShutDown()
         self.check_for_errors(error_code)
         log.info("Camera shutdown")
+
+    def check_for_errors(self, error_code): 
+        """Checks for errors on commands"""
+        if error_code != Error_Codes.DRV_SUCCESS:
+            log.error(f"Error code {error_code}")
+            raise Exception(f"Error code: {error_code}")
