@@ -11,11 +11,11 @@ class IDUS401():
     def __init__(self):
         self.camera = atmcd()  #calls atmcd class from atmcd.py
         self.camera._load_library(r"C:\Users\desha\Codes\andor_dlls\AndorSDK\Python\pyAndorSDK2\pyAndorSDK2\libs\Windows\64") #add path to dll file
-        index = self.camera.GetAvailableCameras()
-        return index
-        # serial_number = self.camera.GetCameraSerialNumber() #must add serial number
-        # log.info(f"Camera initialized with serial number {serial_number}")
-        # self.camera.Initialize(serial_number)
+        self.camera.SetTemperature = -100
+        log.info(f" Available cameras: {self.camera.GetAvailableCameras()}")
+        serial_number = self.camera.GetCameraSerialNumber()
+        log.info(f"Camera initialized with serial number {serial_number}")
+        self.camera.Initialize(serial_number)
     
     def set_camera(self, index):
         """Sets the current camera and initialize based on the index list"""
@@ -108,6 +108,7 @@ class IDUS401():
         error_code = self.camera.ShutDown()
         self.check_for_errors(error_code)
         log.info("Camera shutdown")
+class AxisError(Exception):
 
     def check_for_errors(self, error_code): 
         """Checks for errors on commands"""
