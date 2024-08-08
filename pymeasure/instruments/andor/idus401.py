@@ -108,7 +108,6 @@ class IDUS401():
         error_code = self.camera.ShutDown()
         self.check_for_errors(error_code)
         log.info("Camera shutdown")
-class AxisError(Exception):
 
     def check_for_errors(self, error_code): 
         """Checks for errors on commands"""
