@@ -4,8 +4,12 @@ import logging
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
-from andor_dlls.AndorSDK.Python.pyAndorSpectrograph.pyAndorSpectrograph.spectrograph import ATSpectrograph
-from andor_dlls.AndorSDK.Python.pyAndorSDK2.pyAndorSDK2.atmcd_errors import Error_Codes
+import sys
+import os
+sys.path.append(r"C:\Users\desha\Codes\andor_dlls\AndorSDK\Python\pyAndorSpectrograph\pyAndorSpectrograph")
+sys.path.append(r"C:\Users\desha\Codes\andor_dlls\AndorSDK\Python\pyAndorSDK2\pyAndorSDK2")
+from spectrograph import ATSpectrograph
+from atmcd_errors import Error_Codes
 
 class KYMERA: 
     def __init__(self):
