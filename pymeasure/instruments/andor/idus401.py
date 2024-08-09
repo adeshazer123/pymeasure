@@ -3,8 +3,11 @@ import logging
 log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
-from andor_dlls.AndorSDK.Python.pyAndorSDK2.pyAndorSDK2.atmcd import atmcd
-from andor_dlls.AndorSDK.Python.pyAndorSDK2.pyAndorSDK2.atmcd_errors import Error_Codes
+import sys
+import os 
+sys.path.append(r"C:\Users\desha\Codes\andor_dlls\AndorSDK\Python\pyAndorSDK2\pyAndorSDK2")
+from atmcd import atmcd
+from atmcd_errors import Error_Codes
 
 class IDUS401(): 
     """Class to control Andor Indus Camera"""
