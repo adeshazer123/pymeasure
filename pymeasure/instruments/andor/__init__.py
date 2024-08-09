@@ -23,3 +23,4 @@
 #
 
 from .idus401 import IDUS401
+from .kymera import KYMERA
