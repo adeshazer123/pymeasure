@@ -5,6 +5,7 @@ log = logging.getLogger(__name__)
 log.addHandler(logging.NullHandler())
 
 from andor_dlls.AndorSDK.Python.pyAndorSpectrograph.pyAndorSpectrograph.spectrograph import ATSpectrograph
+from andor_dlls.AndorSDK.Python.pyAndorSDK2.pyAndorSDK2.atmcd_errors import Error_Codes
 
 class KYMERA: 
     def __init__(self):
