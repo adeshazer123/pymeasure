@@ -6,8 +6,7 @@ log.addHandler(logging.NullHandler())
 
 import sys
 import os
-sys.path.append(r"C:\Users\desha\Codes\andor_dlls\AndorSDK\Python\pyAndorSpectrograph\pyAndorSpectrograph")
-sys.path.append(r"C:\Users\desha\Codes\andor_dlls\AndorSDK\Python\pyAndorSDK2\pyAndorSDK2")
+sys.path.append(r"C:\Program Files\Andor SDK") #add path to Andor SDK
 from spectrograph import ATSpectrograph
 from atmcd_errors import Error_Codes
 
