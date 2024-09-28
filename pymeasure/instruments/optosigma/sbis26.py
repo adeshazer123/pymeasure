@@ -158,7 +158,7 @@ class Axis(Channel):
                 self.write("A:D,{ch}," + f"{pos}")
 
 
-        self.wait_for_ready
+        self.wait_for_ready()
         return self.read()
 
     def move_relative(self, pos):
